@@ -49,7 +49,9 @@ public class DNSForwarder extends PluginBase implements Listener {
         String clientId = mappings.get(address);
         Client client = clientId == null ? null : getServer().getClientByDesc(clientId);
         if (client != null) {
-            event.setClientHash(client.getHash());
+            if (client.getPlayers().size() < client.getMaxPlayers()) {
+                event.setClientHash(client.getHash());
+            }
         }
     }
 }
