@@ -33,10 +33,11 @@ public class DNSForwarder extends PluginBase implements Listener {
         for (Map<String, Object> map : forward) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 String clientId = (String) entry.getValue();
+                String address = entry.getKey().toLowerCase();
 
-                getLogger().info("Mapped: " + entry.getKey() + " ---> " + clientId);
+                getLogger().info("Mapped: " + address + " ---> " + clientId);
 
-                this.mappings.put(entry.getKey().toLowerCase(), clientId);
+                this.mappings.put(address, clientId);
             }
         }
 
@@ -45,7 +46,7 @@ public class DNSForwarder extends PluginBase implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onJoin(PlayerLoginEvent event) {
-        String address = event.getPlayer().getLoginChainData().getServerAddress().split(":")[0];
+        String address = event.getPlayer().getLoginChainData().getServerAddress().toLowerCase().split(":")[0];
         String clientId = mappings.get(address);
         Client client = clientId == null ? null : getServer().getClientByDesc(clientId);
         if (client != null) {

@@ -1,6 +1,6 @@
 name: DNSForwarder
 main: com.github.suprememortal.dnsforwarder.DNSForwarder
-version: "1.0.0"
+version: "IGN"
 api: ["1.0.0"]
 author: SupremeMortal
 description: Forward players to a specific server from a mapped DNS address.
