@@ -47,6 +47,11 @@ public class DNSForwarder extends PluginBase implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onJoin(PlayerLoginEvent event) {
         String address = event.getPlayer().getLoginChainData().getServerAddress().toLowerCase().split(":")[0];
+        if (!mappings.containsKey(address)) {
+            event.setKickMessage("Invalid address: " + address);
+            event.setCancelled(true);
+            return;
+        }
         String clientId = mappings.get(address);
         Client client = clientId == null ? null : getServer().getClientByDesc(clientId);
         if (client != null) {
