@@ -14,13 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 public class DNSForwarder extends PluginBase implements Listener {
-    private final Map<String, String> mappings = new HashMap<String, String>();
+    private final Map<String, String> mappings = new HashMap<>();
+    private String def;
 
     @Override
     @SuppressWarnings("unchecked")
     public void onEnable() {
         saveDefaultConfig();
         Config config = getConfig();
+        def = config.getString("default").replace("&n", "\n");
 
         if (!config.exists("forward")) {
             this.saveResource("config.yml", false);
@@ -47,8 +49,8 @@ public class DNSForwarder extends PluginBase implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onJoin(PlayerLoginEvent event) {
         String address = event.getPlayer().getLoginChainData().getServerAddress().toLowerCase().split(":")[0];
-        if (!mappings.containsKey(address)) {
-            event.setKickMessage("Invalid address: " + address);
+        if (!mappings.containsKey(address) && !address.startsWith("192.168.")) {
+            event.setKickMessage(def.replace("%address%", address));
             event.setCancelled(true);
             return;
         }

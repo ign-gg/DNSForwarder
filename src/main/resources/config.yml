@@ -1,2 +1,4 @@
 forward:
   - example.com: hub
+
+default: "Invalid address: %address%&nCheck that you wrote it correctly or try §emc.ign.gg"
