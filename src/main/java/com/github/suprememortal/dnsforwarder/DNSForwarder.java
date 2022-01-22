@@ -14,17 +14,20 @@ import java.util.List;
 import java.util.Map;
 
 public class DNSForwarder extends PluginBase implements Listener {
+
     private final Map<String, String> mappings = new HashMap<>();
     private String def;
+    private String off;
+    private List<String> noLobby;
 
     @Override
     @SuppressWarnings("unchecked")
     public void onEnable() {
         saveDefaultConfig();
         Config config = getConfig();
-        def = config.getString("default").replace("&n", "\n");
 
-        if (!config.exists("forward")) {
+        if (!config.exists("forward") || !config.exists("default") || !config.exists("offlineNoLobby") || !config.exists("noLobby")) {
+            getLogger().warning("Config is incomplete");
             this.saveResource("config.yml", false);
             reloadConfig();
             config = getConfig();
@@ -43,6 +46,10 @@ public class DNSForwarder extends PluginBase implements Listener {
             }
         }
 
+        def = config.getString("default").replace("&n", "\n");
+        off = config.getString("offlineNoLobby");
+        noLobby = config.getStringList("noLobby");
+
         getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -56,10 +63,11 @@ public class DNSForwarder extends PluginBase implements Listener {
         }
         String clientId = mappings.get(address);
         Client client = clientId == null ? null : getServer().getClientByDesc(clientId);
-        if (client != null) {
-            if (client.getPlayers().size() < client.getMaxPlayers()) {
-                event.setClientHash(client.getHash());
-            }
+        if (client != null && client.getPlayers().size() < client.getMaxPlayers()) {
+            event.setClientHash(client.getHash());
+        } else if (noLobby.contains(address)) {
+            event.setKickMessage(off);
+            event.setCancelled(true);
         }
     }
 }
