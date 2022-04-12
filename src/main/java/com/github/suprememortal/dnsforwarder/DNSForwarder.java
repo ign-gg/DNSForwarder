@@ -1,6 +1,8 @@
 package com.github.suprememortal.dnsforwarder;
 
 import org.itxtech.nemisys.Client;
+import org.itxtech.nemisys.command.Command;
+import org.itxtech.nemisys.command.CommandSender;
 import org.itxtech.nemisys.event.EventHandler;
 import org.itxtech.nemisys.event.EventPriority;
 import org.itxtech.nemisys.event.Listener;
@@ -21,8 +23,22 @@ public class DNSForwarder extends PluginBase implements Listener {
     private List<String> noLobby;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onEnable() {
+        loadConfig();
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equals("reloaddns")) {
+            reloadConfig();
+            loadConfig();
+            sender.sendMessage("Config reloaded");
+        }
+        return true;
+    }
+
+    private void loadConfig() {
         saveDefaultConfig();
         Config config = getConfig();
 
@@ -33,6 +49,7 @@ public class DNSForwarder extends PluginBase implements Listener {
             config = getConfig();
         }
 
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> forward = config.getList("forward", Collections.emptyList());
 
         for (Map<String, Object> map : forward) {
@@ -49,8 +66,6 @@ public class DNSForwarder extends PluginBase implements Listener {
         def = config.getString("default").replace("&n", "\n");
         off = config.getString("offlineNoLobby");
         noLobby = config.getStringList("noLobby");
-
-        getServer().getPluginManager().registerEvents(this, this);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
