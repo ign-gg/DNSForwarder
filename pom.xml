@@ -6,7 +6,7 @@
 
     <groupId>com.github.suprememortal</groupId>
     <artifactId>DNSForwarder</artifactId>
-    <version>IGN.6</version>
+    <version>IGN.7</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

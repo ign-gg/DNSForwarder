@@ -19,7 +19,8 @@ public class DNSForwarder extends PluginBase implements Listener {
 
     private final Map<String, String> mappings = new HashMap<>();
     private String def;
-    private String off;
+    private String offlineNoLobby;
+    private boolean requireValidTarget;
     private List<String> noLobby;
 
     @Override
@@ -64,14 +65,15 @@ public class DNSForwarder extends PluginBase implements Listener {
         }
 
         def = config.getString("default").replace("&n", "\n");
-        off = config.getString("offlineNoLobby");
+        offlineNoLobby = config.getString("offlineNoLobby");
+        requireValidTarget = config.getBoolean("requireValidTarget");
         noLobby = config.getStringList("noLobby");
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onJoin(PlayerLoginEvent event) {
         String address = event.getPlayer().getLoginChainData().getServerAddress().toLowerCase().split(":")[0];
-        if (!mappings.containsKey(address) && !address.startsWith("192.168.")) {
+        if (requireValidTarget && !mappings.containsKey(address) && !address.startsWith("192.168.")) {
             event.setKickMessage(def.replace("%address%", address));
             event.setCancelled(true);
             return;
@@ -81,7 +83,7 @@ public class DNSForwarder extends PluginBase implements Listener {
         if (client != null && client.getPlayers().size() < client.getMaxPlayers()) {
             event.setClientHash(client.getHash());
         } else if (noLobby.contains(address)) {
-            event.setKickMessage(off);
+            event.setKickMessage(offlineNoLobby);
             event.setCancelled(true);
         }
     }

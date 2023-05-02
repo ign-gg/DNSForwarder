@@ -1,6 +1,8 @@
 forward:
   - example.com: hub
 
+requireValidTarget: false
+
 default: "Invalid address: %address%&nCheck that you wrote it correctly or try §emc.ign.gg"
 
 offlineNoLobby: "The server is offline, please try again later"
