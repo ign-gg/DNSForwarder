@@ -6,26 +6,20 @@
 
     <groupId>com.github.suprememortal</groupId>
     <artifactId>DNSForwarder</artifactId>
-    <version>IGN.7</version>
+    <version>IGN.8</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>nukkitx-repo-snapshot</id>
-            <url>https://repo.nukkitx.com/snapshot/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.itxtech.nemisys</groupId>
-            <artifactId>nemisys</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <artifactId>Nemisys</artifactId>
+            <version>PM1E</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/Nemisys-PM1E-PRIVA.jar</systemPath>
         </dependency>
     </dependencies>
 

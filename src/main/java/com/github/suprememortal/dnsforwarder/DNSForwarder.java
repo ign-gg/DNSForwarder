@@ -53,6 +53,8 @@ public class DNSForwarder extends PluginBase implements Listener {
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> forward = config.getList("forward", Collections.emptyList());
 
+        this.mappings.clear();
+
         for (Map<String, Object> map : forward) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 String clientId = (String) entry.getValue();
